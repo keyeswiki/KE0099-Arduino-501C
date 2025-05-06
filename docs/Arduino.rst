@@ -562,133 +562,86 @@ RGB灯*1
 
 测试代码
 
-int redled=9;
+::
 
-int yellowled=10;
+   int redled = 9;     // 红色LED引脚
+   int yellowled = 10;  // 黄色LED引脚
+   int greenled = 11;   // 绿色LED引脚
 
-int greenled=11;
+   int redpin = 5;     // 红色按钮引脚
+   int yellowpin = 4;   // 黄色按钮引脚
+   int greenpin = 3;    // 绿色按钮引脚
+   int restpin = 2;     // 复位按钮引脚
 
-int redpin=5;
+   int red;            // 红色按钮状态
+   int yellow;         // 黄色按钮状态
+   int green;          // 绿色按钮状态
 
-int yellowpin=4;
+   void setup()
+   {
+       // 初始化LED引脚为输出模式
+       pinMode(redled, OUTPUT);
+       pinMode(yellowled, OUTPUT);
+       pinMode(greenled, OUTPUT);
+       
+       // 初始化按钮引脚为输入模式
+       pinMode(redpin, INPUT);
+       pinMode(yellowpin, INPUT);
+       pinMode(greenpin, INPUT);
+   }
 
-int greenpin=3;
+   void loop()
+   {
+       // 读取按钮状态
+       red = digitalRead(redpin);
+       yellow = digitalRead(yellowpin);
+       green = digitalRead(greenpin);
+       
+       // 根据按钮状态点亮对应LED
+       if(red == LOW) RED_YES();
+       if(yellow == LOW) YELLOW_YES();
+       if(green == LOW) GREEN_YES();
+   }
 
-int restpin=2;
+   void RED_YES()  // 红色按钮响应函数
+   {
+       while(digitalRead(restpin) == 1)  // 等待复位按钮按下
+       {
+           digitalWrite(redled, HIGH);    // 点亮红色LED
+           digitalWrite(yellowled, LOW);  // 关闭黄色LED
+           digitalWrite(greenled, LOW);   // 关闭绿色LED
+       }
+       clear_led();  // 清除所有LED
+   }
 
-int red;
+   void YELLOW_YES()  // 黄色按钮响应函数
+   {
+       while(digitalRead(restpin) == 1)  // 等待复位按钮按下
+       {
+           digitalWrite(redled, LOW);     // 关闭红色LED
+           digitalWrite(yellowled, HIGH); // 点亮黄色LED
+           digitalWrite(greenled, LOW);   // 关闭绿色LED
+       }
+       clear_led();  // 清除所有LED
+   }
 
-int yellow;
+   void GREEN_YES()  // 绿色按钮响应函数
+   {
+       while(digitalRead(restpin) == 1)  // 等待复位按钮按下
+       {
+           digitalWrite(redled, LOW);    // 关闭红色LED
+           digitalWrite(yellowled, LOW); // 关闭黄色LED
+           digitalWrite(greenled, HIGH);  // 点亮绿色LED
+       }
+       clear_led();  // 清除所有LED
+   }
 
-int green;
-
-void setup()
-
-{
-
-pinMode(redled,OUTPUT);
-
-pinMode(yellowled,OUTPUT);
-
-pinMode(greenled,OUTPUT);
-
-pinMode(redpin,INPUT);
-
-pinMode(yellowpin,INPUT);
-
-pinMode(greenpin,INPUT);
-
-}
-
-void loop()
-
-{
-
-red=digitalRead(redpin);
-
-yellow=digitalRead(yellowpin);
-
-green=digitalRead(greenpin);
-
-if(red==LOW)RED_YES();
-
-if(yellow==LOW)YELLOW_YES();
-
-if(green==LOW)GREEN_YES();
-
-}
-
-void RED_YES()
-
-{
-
-while(digitalRead(restpin)==1)
-
-{
-
-digitalWrite(redled, HIGH);
-
-digitalWrite(yellowled, LOW);
-
-digitalWrite(greenled, LOW);
-
-}
-
-clear_led();
-
-}
-
-void YELLOW_YES()
-
-{
-
-while(digitalRead(restpin)==1)
-
-{
-
-digitalWrite(redled, LOW);
-
-digitalWrite(yellowled, HIGH);
-
-digitalWrite(greenled, LOW);
-
-}
-
-clear_led();
-
-}
-
-void GREEN_YES()
-
-{
-
-while(digitalRead(restpin)==1)
-
-{
-
-digitalWrite(redled, LOW);
-
-digitalWrite(yellowled, LOW);
-
-digitalWrite(greenled, HIGH);
-
-}
-
-clear_led();
-
-}
-
-void clear_led()
-
-{
-
-digitalWrite(redled, LOW);
-
-digitalWrite(yellowled, LOW);
-
-digitalWrite(greenled, LOW);
-
-}
+   void clear_led()  // 清除所有LED函数
+   {
+       digitalWrite(redled, LOW);    // 关闭红色LED
+       digitalWrite(yellowled, LOW); // 关闭黄色LED
+       digitalWrite(greenled, LOW);  // 关闭绿色LED
+   }
 
 测试结果
 
@@ -723,33 +676,35 @@ LED*1
 
 测试代码
 
-int ledpin=11;//定义数字接口11（PWM 输出）
+::
 
-void setup()
+   int ledpin=11;//定义数字接口11（PWM 输出）
 
-{
+   void setup()
 
-pinMode(ledpin,OUTPUT);//定义数字接口11 为输出
+   {
 
-Serial.begin(9600);//设置波特率为9600
+       pinMode(ledpin,OUTPUT);//定义数字接口11 为输出
 
-}
+       Serial.begin(9600);//设置波特率为9600
 
-void loop()
+   }
 
-{
+   void loop()
 
-int val=analogRead(0);//读取模拟口A0口的值
+   {
 
-val = map(val, 0, 1023, 0, 255);//从0-1023映射到0-255
+       int val=analogRead(0);//读取模拟口A0口的值
 
-Serial.println(val);//显示val 变量
+       val = map(val, 0, 1023, 0, 255);//从0-1023映射到0-255
 
-analogWrite(ledpin,val);// 打开LED 并设置亮度
+       Serial.println(val);//显示val 变量
 
-delay(100);\ `//延时0.1 <//xn--0-3q3bu0s.1>`__ 秒
+       analogWrite(ledpin,val);// 打开LED 并设置亮度
 
-}
+       delay(100);//延时0.1 秒
+
+   }
 
 测试结果
 
